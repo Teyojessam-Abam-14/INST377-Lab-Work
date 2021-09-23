@@ -4,11 +4,6 @@
     box-sizing: border-box;
   }
 
-  @media only screen and (max-width: 400px) {
-    body {
-      background-color: #F09A9D; /* Red */
-    }
-  }
 
   .wrapper {
     display:flex;
@@ -80,6 +75,7 @@
 .photo-grid-container {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
   }
   
   .photo-grid {
