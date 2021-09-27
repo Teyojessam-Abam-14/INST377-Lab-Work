@@ -6,7 +6,7 @@ document.querySelector('#carousel_button--prev').addEventListener("click", funct
     moveToPreviousSlide();
    });
 
-document.querySelectorAll('#carousel_button--next').addEventListener("click", function(){
+document.querySelector('#carousel_button--next').addEventListener("click", function(){
     moveToNextSlide();
    });
 
@@ -29,7 +29,6 @@ function moveToPreviousSlide(){
 }
 
 function moveToNextSlide(){
-    
     if(slidePosition == totalSlides - 1){
         slidePosition = 0;
     } else {
