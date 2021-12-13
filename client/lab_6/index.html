@@ -1,43 +1,61 @@
-<html>
-  <body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
 
-      <script>
-          const endpoint = 'https://data.princegeorgescountymd.gov/resource/umjn-t2iz.json';
+  <div class = "wrapper">
+    <h1 class = "title"><strong>TEYOJESSAM ABAM Lab 6: Typehead Entry</strong></h1>
+ </div>
+  <form class="search-form">
+    <input type="text" class="search" placeholder="restaurant">
+    <ul class="suggestions">
+      <li>Filter for restaurant</li>
+    </ul>
+  </form>
+<script>
+async function windowActions(){
+const endpoint = 'https://data.princegeorgescountymd.gov/resource/umjn-t2iz.json';
 
-          const restaurants = [];
 
-          fetch(endpoint)
-            .then(blob => blob.json)
-            .then(data => restaurants.push(...data));
 
-          function findMatches(wordToMatch, restaurants){
-            return restaurants.filter(place => {
-              const regex = RegExp(wordToMatch, 'gi')
-              return place.category.match(RegExp)
-            })
-          }
+const request = await fetch(endpoint)
+const restaurants = await request.json();
 
-          function displayMatches(){
-            const matchArray = findMatches(this.value, restaurants);
-            const html = matchArray.map(place =>{
-              const regex = RegExp(this.value, 'gi');
-              const typeName = place.category.replace(regex, `<span class = "h1">${this.value}</span>`);
-              return `
-              <li>
-                <span class = "name">${place.name}</span>
-                <span class = "type">${typeName}</span>
-              </li>
-            ` }).join('');
-            suggestions.innerHTML = html;
-          }
+function findMatches(wordToMatch, restaurants) {
+  return restaurants.filter(place => {
+    // here we need to figure out if the city or state matches what was searched
+    const regex = new RegExp(wordToMatch, 'gi');
+    return place.category.match(regex)
+  });
+}
 
-          const searchInput = document.querySelector('.search');
-          const suggestions = document.querySelector('.suggestions');
+function displayMatches(event) {
+  const matchArray = findMatches(event.target.value, restaurants);
+  const html = matchArray.map(place => {
+   // const typeName = place.category.replace(place.category, `<span class="hl">${this.value}</span>`);
+    return `
+      <li>
+        <span class="type">${place.category}</span>
+        <span class="name">${place.name}</span>
+      </li>
+    `;
+  }).join('');
+  suggestions.innerHTML = html;
+}
 
-          searchInput.addEventListener('change', displayMatches);
-          searchInput.addEventListener('keyup', displayMatches);
-        
-     </script>
+const searchInput = document.querySelector('.search');
+const suggestions = document.querySelector('.suggestions');
 
+searchInput.addEventListener('change', displayMatches);
+searchInput.addEventListener('keyup', (evt) => { displayMatches(evt) });
+}
+
+window.onload = windowActions()
+
+</script>
   </body>
 </html>
