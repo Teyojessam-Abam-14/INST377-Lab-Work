@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+   crossorigin=""></script>
+</head>
+<body>
+
+  <div class = "wrapper">
+    <h1 class = "title"><strong>TEYOJESSAM ABAM Lab 7: Typehead Entry with Map</strong></h1>
+ </div>
+  <form class="search-form">
+    <input type="text" class="search" placeholder="restaurant">
+    <ul class="suggestions">
+      <li>Filter for restaurant</li>
+    </ul>
+  </form>
+
+  <div class='photo-grid-container'>
+    <img src='images_map/map.png'/>
+  </div>
+
+  <div id="map"></div>
+<script>
+async function windowActions(){
+const endpoint = 'https://data.princegeorgescountymd.gov/resource/umjn-t2iz.json';
+
+
+
+const request = await fetch(endpoint)
+const restaurants = await request.json();
+
+function findMatches(wordToMatch, restaurants) {
+  return restaurants.filter(place => {
+    const regex = new RegExp(wordToMatch, 'gi');
+    return place.zip.match(regex)
+  });
+}
+
+function displayMatches(event) {
+  const matchArray = findMatches(event.target.value, restaurants);
+  const html = matchArray.map(place => {
+   // const typeName = place.category.replace(place.category, `<span class="hl">${this.value}</span>`);
+    return `
+      <li>
+        <span class="type">${place.zip}</span>
+        <span class="name">${place.name}</span>
+      </li>
+    `;
+  }).join('');
+  suggestions.innerHTML = html;
+}
+
+const searchInput = document.querySelector('.search');
+const suggestions = document.querySelector('.suggestions');
+
+searchInput.addEventListener('change', displayMatches);
+searchInput.addEventListener('keyup', (evt) => { displayMatches(evt) });
+}
+
+window.onload = windowActions()
+
+var map = L.map('map').setView([51.505, -0.09], 13);
+L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 18,
+    id: 'mapbox/streets-v11',
+    tileSize: 512,
+    zoomOffset: -1,
+    accessToken: 'your.mapbox.access.token'
+}).addTo(map);
+
+</script>
+  </body>
+</html>

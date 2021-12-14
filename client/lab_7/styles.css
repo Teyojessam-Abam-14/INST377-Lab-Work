@@ -1,0 +1,9 @@
+#map 
+{ height: 180px; 
+}
+
+.photo-grid-container {
+    display: flex;
+    justify-content: right;
+    flex-wrap: wrap;
+  }
